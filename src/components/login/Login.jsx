@@ -39,8 +39,14 @@ const Login = () => {
        
        signInWithPopup(auth, githubProvider)
        .then(result =>{
-        console.log(result)
-        setUser(result.user)
+        const loggedInUser = result.user;
+        console.log(loggedInUser)
+
+        if(!loggedInUser.email && loggedInUser?.providerData?.length){
+            console.log('email is not provided', loggedInUser.providerData)
+        }
+        setUser(loggedInUser)
+        
        })
        .catch(error =>{
         console.log(error)
@@ -81,7 +87,7 @@ const Login = () => {
             {
                 user && <div className=''>
                   <h1>{user.displayName}</h1>
-                  <p>{user.email}</p>
+                  <p>Email: {user.email}</p>
                   <img src={user.photoURL} alt="" />
                 </div>
             }
