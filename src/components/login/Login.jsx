@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth } from '../firebase/firebase.init';
 
@@ -7,6 +7,7 @@ import { auth } from '../firebase/firebase.init';
 const Login = () => {
 
     const provider = new GoogleAuthProvider();
+    const githubProvider = new GithubAuthProvider();
     const [user, setUser] = useState(null)
 
     const handleSignIn = () =>{
@@ -33,6 +34,28 @@ const Login = () => {
           })
     }
 
+    const handleGithubSignIn = () =>{
+       console.log('github login is starting');
+       
+       signInWithPopup(auth, githubProvider)
+       .then(result =>{
+        console.log(result)
+        setUser(result.user)
+       })
+       .catch(error =>{
+        console.log(error)
+       })
+    }
+    const handleGithubSignOut = () =>{
+        signOut(auth).then(() =>{
+            console.log('sign out done')
+            setUser(null)
+        })
+        .catch(error =>{
+            console.log(error)
+        })
+    }
+
     return (
         <div>
             <h1 className='mb-5'>Please Sign in</h1>
@@ -41,9 +64,18 @@ const Login = () => {
 
             {
                 user ?
-                 <button onClick={handleSignOut} className='bg-green-200 p-2 rounded-lg'>Sign Out</button>
+                  <>
+                    <button onClick={handleSignOut} className='bg-green-200 p-2 rounded-lg'>Google Sign Out</button>
+
+                    <button onClick={handleGithubSignOut} className='bg-green-200 p-2 rounded-lg ml-5'>Github Sign Out</button>
+                  </>
+                 
                   :
-                 <button onClick={handleSignIn} className='bg-green-200 p-2 rounded-lg'>Sign In</button>
+                 <>
+                   <button onClick={handleSignIn} className='bg-green-200 p-2 rounded-lg'>Sign In with Google</button>
+
+                   <button onClick={handleGithubSignIn} className='ml-5 bg-green-200 p-2 rounded-lg'>Sign In with Github</button>
+                 </>
             }
 
             {
