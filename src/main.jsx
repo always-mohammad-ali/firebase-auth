@@ -6,17 +6,31 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Root from './layouts/Root.jsx';
+import Home from './components/Home/Home.jsx'
+import Login from './components/login/Login.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Hello world!</div>,
+    element: <Root></Root>,
+    children:[
+      {
+        path:"/home",
+        element: <Home></Home>
+      },
+      {
+         path:'/login',
+         element:<Login></Login>
+      }
+    ]
+
   },
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router={router} />
-    <App />
+    
   </StrictMode>,
 )
